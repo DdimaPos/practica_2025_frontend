@@ -1,12 +1,12 @@
 import { Calendar, ArrowUp, ArrowDown } from "lucide-react";
-import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type PostProps = {
   author: string;
   title: string;
   content: string;
   created_at: string;
-  rating: number | string;
+  rating: number;
   photo: string;
 };
 
@@ -19,15 +19,12 @@ export default function PostCard({
   photo,
 }: PostProps) {
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm mb-4">
+    <div className="rounded-lg border bg-white p-4 shadow-sm mb-3">
       <div className="flex items-start gap-3">
-        <Image
-          src={photo}
-          alt={author}
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={photo} alt={author} />
+          <AvatarFallback>{author.charAt(0).toUpperCase()}</AvatarFallback>
+        </Avatar>
 
         <div className="flex-1">
           <p className="font-semibold text-sm">@{author}</p>
