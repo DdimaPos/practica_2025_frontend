@@ -1,8 +1,10 @@
 import Link from "next/link";
 import {  User, Settings, BookOpen, Users2, Github, DollarSign, PlusCircle, Layers, House} from "lucide-react";
-import Logout from "./Logout";
+import Logout from "./components/Logout";
 
-export default function Navbar() {
+export default function Navbar() {   
+
+
   return (
     <div className="h-screen border-r flex flex-col p-15 justify-center items-center"> 
       <nav className="flex flex-col gap-15 text-[#818181] text-center">
