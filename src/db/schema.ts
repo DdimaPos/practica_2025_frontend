@@ -43,12 +43,12 @@ export const eventTypeEnum = pgEnum('event_type', [
   'personal',
   'meeting',
 ]);
-export const roomTypeEnum = pgEnum('room_type', ['direct', 'group']);
-export const messageTypeEnum = pgEnum('message_type', [
-  'text',
-  'image',
-  'file',
-]);
+// export const roomTypeEnum = pgEnum('room_type', ['direct', 'group']);
+// export const messageTypeEnum = pgEnum('message_type', [
+//   'text',
+//   'image',
+//   'file',
+// ]);
 export const notificationTypeEnum = pgEnum('notification_type', [
   'post_reaction',
   'comment',
@@ -268,55 +268,27 @@ export const professorReviews = pgTable(
   'professor_reviews',
   {
     id: serial('id').primaryKey(),
-    professorId: integer('professor_id').references(() => users.id, {
-      onDelete: 'cascade',
-    }),
     reviewerId: integer('reviewer_id').references(() => users.id, {
       onDelete: 'cascade',
     }),
-    courseId: integer('course_id').references(() => courses.id),
+    courseProfessorsId: integer('course_professor_id').references(
+      () => courseProfessors.id,
+      { onDelete: 'cascade' }
+    ),
     overallRating: integer('overall_rating'),
     teachingQuality: integer('teaching_quality'),
     communication: integer('communication'),
     helpfulness: integer('helpfulness'),
     reviewText: text('review_text'),
     isAnonymous: boolean('is_anonymous').default(true),
-    academicYear: varchar('academic_year', { length: 10 }),
     createdAt: timestamp('created_at').defaultNow(),
   },
   table => [
     unique().on(
-      table.professorId,
       table.reviewerId,
-      table.courseId,
-      table.academicYear
+      table.courseProfessorsId
     ),
-    index('idx_professor_reviews_prof').on(table.professorId),
-  ]
-);
-
-export const courseReviews = pgTable(
-  'course_reviews',
-  {
-    id: serial('id').primaryKey(),
-    courseId: integer('course_id').references(() => courses.id, {
-      onDelete: 'cascade',
-    }),
-    reviewerId: integer('reviewer_id').references(() => users.id, {
-      onDelete: 'cascade',
-    }),
-    overallRating: integer('overall_rating'),
-    difficulty: integer('difficulty'),
-    workload: integer('workload'),
-    usefulness: integer('usefulness'),
-    reviewText: text('review_text'),
-    isAnonymous: boolean('is_anonymous').default(true),
-    academicYear: varchar('academic_year', { length: 10 }),
-    createdAt: timestamp('created_at').defaultNow(),
-  },
-  table => [
-    unique().on(table.courseId, table.reviewerId, table.academicYear),
-    index('idx_course_reviews_course').on(table.courseId),
+    index('idx_professor_reviews_prof').on(table.courseProfessorsId)
   ]
 );
 
@@ -359,50 +331,50 @@ export const userSchedules = pgTable('user_schedules', {
 });
 
 // Chat System
-export const chatRooms = pgTable('chat_rooms', {
-  id: serial('id').primaryKey(),
-  roomType: roomTypeEnum('room_type').notNull(),
-  name: varchar('name', { length: 200 }),
-  createdBy: integer('created_by').references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow(),
-});
-
-export const chatParticipants = pgTable(
-  'chat_participants',
-  {
-    id: serial('id').primaryKey(),
-    roomId: integer('room_id').references(() => chatRooms.id, {
-      onDelete: 'cascade',
-    }),
-    userId: integer('user_id').references(() => users.id, {
-      onDelete: 'cascade',
-    }),
-    joinedAt: timestamp('joined_at').defaultNow(),
-    isAdmin: boolean('is_admin').default(false),
-  },
-  table => [unique().on(table.roomId, table.userId)]
-);
-
-export const chatMessages = pgTable(
-  'chat_messages',
-  {
-    id: serial('id').primaryKey(),
-    roomId: integer('room_id').references(() => chatRooms.id, {
-      onDelete: 'cascade',
-    }),
-    senderId: integer('sender_id').references(() => users.id, {
-      onDelete: 'cascade',
-    }),
-    messageText: text('message_text').notNull(),
-    messageType: messageTypeEnum('message_type').default('text'),
-    fileUrl: varchar('file_url', { length: 500 }),
-    isRead: boolean('is_read').default(false),
-    createdAt: timestamp('created_at').defaultNow(),
-  },
-  table => [
-    index('idx_chat_messages_room_created').on(table.roomId, table.createdAt),
-  ]
-);
+// export const chatRooms = pgTable('chat_rooms', {
+//   id: serial('id').primaryKey(),
+//   roomType: roomTypeEnum('room_type').notNull(),
+//   name: varchar('name', { length: 200 }),
+//   createdBy: integer('created_by').references(() => users.id),
+//   createdAt: timestamp('created_at').defaultNow(),
+// });
+//
+// export const chatParticipants = pgTable(
+//   'chat_participants',
+//   {
+//     id: serial('id').primaryKey(),
+//     roomId: integer('room_id').references(() => chatRooms.id, {
+//       onDelete: 'cascade',
+//     }),
+//     userId: integer('user_id').references(() => users.id, {
+//       onDelete: 'cascade',
+//     }),
+//     joinedAt: timestamp('joined_at').defaultNow(),
+//     isAdmin: boolean('is_admin').default(false),
+//   },
+//   table => [unique().on(table.roomId, table.userId)]
+// );
+//
+// export const chatMessages = pgTable(
+//   'chat_messages',
+//   {
+//     id: serial('id').primaryKey(),
+//     roomId: integer('room_id').references(() => chatRooms.id, {
+//       onDelete: 'cascade',
+//     }),
+//     senderId: integer('sender_id').references(() => users.id, {
+//       onDelete: 'cascade',
+//     }),
+//     messageText: text('message_text').notNull(),
+//     messageType: messageTypeEnum('message_type').default('text'),
+//     fileUrl: varchar('file_url', { length: 500 }),
+//     isRead: boolean('is_read').default(false),
+//     createdAt: timestamp('created_at').defaultNow(),
+//   },
+//   table => [
+//     index('idx_chat_messages_room_created').on(table.roomId, table.createdAt),
+//   ]
+// );
 
 // Notifications & Social
 export const notifications = pgTable(
