@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import db from '@/db/index';
 import {
   users,
@@ -840,9 +841,10 @@ async function main() {
     await truncateAllTables();
     await seedDatabase();
     console.log('all done! 🎉');
+    return 0;
   } catch (error) {
     console.error('script failed:', error);
-    console.error(error);
+    throw error;
   }
 }
 
