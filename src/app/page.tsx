@@ -1,10 +1,9 @@
-import Posts from '@/features/postField';
+import Posts from "@/features/HomePostsContainer";
 
 export default function Home() {
-
   return (
     <div className='flex justify-between py-2'>
-      <div className='mb-4 max-h-[80vh] w-5/8 overflow-y-auto rounded-lg bg-white p-4 shadow-sm scrollbar-hide'>
+      <div className='scrollbar-hide mb-4 max-h-[80vh] w-6/9 overflow-y-auto rounded-lg bg-white p-4 shadow-sm'>
         <Posts />
       </div>
 

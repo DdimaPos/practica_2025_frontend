@@ -6,7 +6,7 @@ export function useInfiniteScroll(callback: () => void) {
   useEffect(() => {
     if (!loaderRef.current) return;
 
-    const node = loaderRef.current; // To not make ESLint crazy
+    const node = loaderRef.current;
 
     const observer = new IntersectionObserver(
       entries => {
