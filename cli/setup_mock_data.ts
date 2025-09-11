@@ -34,7 +34,7 @@ export async function createMockClient() {
           return []
         },
         setAll(cookies) {
-          console.debug('Set-Cookie:', cookies)
+          console.log('🍪 mock cookies set:', cookies.length)
           return
         },
       }
@@ -67,7 +67,7 @@ async function truncateAllTables() {
   console.log('✨ tables are squeaky clean!');
 }
 
-async function createAuthUsers(firstTime = false) {
+async function createAuthUsers() {
   console.log('🔐 creating auth users...');
 
   const supabase = await createMockClient();
@@ -80,36 +80,41 @@ async function createAuthUsers(firstTime = false) {
     { email: 'alex.tech@student.utm.md', password: 'password123', firstName: 'Alex', lastName: 'Technoblade' },
   ];
 
-  if (firstTime) for (const user of userData) {
-    const { data, error } = await supabase.auth.admin.createUser({
-      email: user.email,
-      password: user.password,
-      email_confirm: true,
-    });
+  try {
+    for (const user of userData) {
+      const { data, error } = await supabase.auth.admin.createUser({
+        email: user.email,
+        password: user.password,
+        email_confirm: true,
+      });
 
-    if (error) {
-      console.error(`failed to create auth user ${user.email}:`, error);
-      throw error;
+      if (error) {
+        throw new Error(`[SUPABASE] ${user.email}: ${error.message}`);
+      }
+
+      authUsers.push({
+        authId: data.user.id,
+        ...user,
+      });
     }
-
-    authUsers.push({
-      authId: data.user.id,
-      ...user,
-    });
   }
-  else for (const user of userData) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: user.password,
-    });
-    if (error) {
-      console.error(`failed to sign in auth user ${user.email}:`, error);
-      throw error;
+  catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    console.log('assuming auth users already exist');
+    for (const user of userData) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: user.password,
+      });
+      if (error) {
+        console.error(`failed to sign in auth user ${user.email}:`, error);
+        throw error;
+      }
+      authUsers.push({
+        authId: data.user.id,
+        ...user,
+      });
     }
-    authUsers.push({
-      authId: data.user.id,
-      ...user,
-    });
   }
 
   console.log(`✅ created ${authUsers.length} auth users`);
@@ -837,10 +842,15 @@ async function seedDatabase() {
 }
 
 async function main() {
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL === undefined || process.env.SUPABASE_SECRET_KEY === undefined) {
+    console.error('❌ missing SUPABASE env vars, cannot continue');
+    console.error('make sure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY are set in .env.local');
+    throw new Error('missing SUPABASE env vars');
+  }
   try {
     await truncateAllTables();
     await seedDatabase();
-    console.log('all done! 🎉');
+    console.log('all done!');
     return 0;
   } catch (error) {
     console.error('script failed:', error);
