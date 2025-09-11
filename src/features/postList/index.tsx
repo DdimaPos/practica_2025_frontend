@@ -1,20 +1,27 @@
-import PostCard from './components/PostCard';
+'use client';
+
+import {useInfiniteScroll} from './hooks/useInfiniteScroll';
+import PostList from '../postList';
 import {PostProp} from './types/post';
 
-type PostListProps = {
-  posts: PostProp[];
-};
+interface Props {
+  posts: PostProp;
+  loadMoreHandler: () => void;
+}
 
-export default function PostList({posts}: PostListProps) {
-  if (!posts || posts.length === 0) {
-    return <p>Still no posts here.</p>;
-  }
+export default function Posts({posts, loadMoreHandler}: Props) {
+  const loaderRef = useInfiniteScroll(loadMoreHandler);
 
   return (
     <>
-      {posts.map(post => (
-        <PostCard key={post.id} {...post} />
-      ))}
+      <PostList posts={posts} loadMoreHandler={loadMoreHandler} />
+
+      <div
+        ref={loaderRef}
+        className='flex h-10 items-center justify-center text-gray-500'
+      >
+        Loading more...
+      </div>
     </>
   );
 }
