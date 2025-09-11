@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardFooter,
 } from '@/components/ui/card';
-import { PostProp } from '../types/post';
+import {PostProp} from '../types/post';
 
 export default function PostCard({
   author,

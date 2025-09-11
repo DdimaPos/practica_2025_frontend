@@ -1,4 +1,4 @@
-import Posts from "@/features/HomePostsContainer";
+import Posts from '@/features/HomePostsContainer';
 
 export default function Home() {
   return (

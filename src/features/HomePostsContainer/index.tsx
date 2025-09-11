@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { usePosts } from "./hooks/usePosts";
-import { useInfiniteScroll } from "./hooks/useInfiniteScroll";
-import PostList from "../postList";
+import {usePosts} from './hooks/usePosts';
+import {useInfiniteScroll} from './hooks/useInfiniteScroll';
+import PostList from '../postList';
 
 export default function Posts() {
-  const { posts, loading, loadMore } = usePosts();
+  const {posts, loading, loadMore} = usePosts();
   const loaderRef = useInfiniteScroll(loadMore);
 
   if (loading) return <p>Loading posts...</p>;
@@ -16,7 +16,7 @@ export default function Posts() {
 
       <div
         ref={loaderRef}
-        className="flex h-10 items-center justify-center text-gray-500"
+        className='flex h-10 items-center justify-center text-gray-500'
       >
         Loading more...
       </div>
