@@ -315,20 +315,20 @@ export const studentRatings = pgTable(
 );
 
 // Schedule & Calendar
-export const userSchedules = pgTable('user_schedules', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
-  title: varchar('title', { length: 200 }).notNull(),
-  description: text('description'),
-  eventType: eventTypeEnum('event_type').notNull(),
-  startDatetime: timestamp('start_datetime').notNull(),
-  endDatetime: timestamp('end_datetime').notNull(),
-  location: varchar('location', { length: 300 }),
-  courseId: integer('course_id').references(() => courses.id),
-  isRecurring: boolean('is_recurring').default(false),
-  recurrencePattern: varchar('recurrence_pattern', { length: 100 }),
-  createdAt: timestamp('created_at').defaultNow(),
-});
+// export const userSchedules = pgTable('user_schedules', {
+//   id: serial('id').primaryKey(),
+//   userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
+//   title: varchar('title', { length: 200 }).notNull(),
+//   description: text('description'),
+//   eventType: eventTypeEnum('event_type').notNull(),
+//   startDatetime: timestamp('start_datetime').notNull(),
+//   endDatetime: timestamp('end_datetime').notNull(),
+//   location: varchar('location', { length: 300 }),
+//   courseId: integer('course_id').references(() => courses.id),
+//   isRecurring: boolean('is_recurring').default(false),
+//   recurrencePattern: varchar('recurrence_pattern', { length: 100 }),
+//   createdAt: timestamp('created_at').defaultNow(),
+// });
 
 // Chat System
 // export const chatRooms = pgTable('chat_rooms', {
