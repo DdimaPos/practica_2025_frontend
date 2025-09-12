@@ -42,6 +42,7 @@ const eslintConfig = [
       'unicorn/filename-case': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/no-array-for-each': 'off',
+      'unicorn/prefer-string-raw': 'off',
 
       // Add any other custom rule overrides here
       // "some-rule": "warn",
