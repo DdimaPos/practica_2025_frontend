@@ -1,5 +1,10 @@
-import {ReactElement} from 'react';
+import {SignUpForm} from '@/features/Authentication/components/SignUpForm';
+import {signup} from '../actions';
 
-export default function Register(): ReactElement {
-  return <div className='bg-green-950'>Register</div>;
+export default function LoginPage() {
+  return (
+    <>
+      <SignUpForm onSubmit={signup} />
+    </>
+  );
 }

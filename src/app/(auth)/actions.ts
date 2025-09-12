@@ -15,9 +15,12 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   };
 
+  console.log('login form data', JSON.stringify(data));
+
   const {error} = await supabase.auth.signInWithPassword(data);
 
   if (error) {
+    console.error('Error when getting logged in', error?.message);
     redirect('/error');
   }
 
@@ -35,10 +38,12 @@ export async function signup(formData: FormData) {
     password: formData.get('password') as string,
   };
 
+  console.log('sign up form data', JSON.stringify(data));
+
   const {error} = await supabase.auth.signUp(data);
-  console.log(error?.message);
 
   if (error) {
+    console.error('Error when getting authenticated', error?.message);
     redirect('/error');
   }
 
