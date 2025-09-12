@@ -99,7 +99,13 @@ async function createAuthUsers() {
     }
   }
   catch (error) {
-    if (error instanceof Error) console.error(error.message);
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    if (!(error instanceof Error) || !error.message.includes('has already been registered')) {
+      throw error;
+    }
+
     console.log('assuming auth users already exist');
     for (const user of userData) {
       const { data, error } = await supabase.auth.signInWithPassword({
